@@ -4,6 +4,17 @@ local screenHeight = 450
 local leftPaddle = {x = 30, y = 185, width = 15, height = 80, speed = 300}
 local rightPaddle = {x = 755, y = 185, width = 15, height = 80, speed = 300}
 local ball = {x = 393, y = 218, width = 14, height = 14, dx = 250, dy = 60}
+local leftScore = 0
+local rightScore = 0
+local scoreFont
+
+-- Put the ball back in the center.
+local function resetBall(direction)
+    ball.x = screenWidth / 2 - ball.width / 2
+    ball.y = screenHeight / 2 - ball.height / 2
+    ball.dx = 250 * direction
+    ball.dy = 60
+end
 
 -- Return true when two rectangles overlap.
 local function isColliding(a, b)
@@ -17,6 +28,7 @@ function love.load()
     love.window.setMode(screenWidth, screenHeight)
     love.window.setTitle("Pong Game")
     love.graphics.setBackgroundColor(0.08, 0.08, 0.12)
+    scoreFont = love.graphics.newFont(32)
 end
 
 function love.update(dt)
@@ -61,6 +73,15 @@ function love.update(dt)
         ball.x = rightPaddle.x - ball.width
         ball.dx = -ball.dx
     end
+
+    -- Give a point and return the ball to the center.
+    if ball.x + ball.width < 0 then
+        rightScore = rightScore + 1
+        resetBall(-1)
+    elseif ball.x > screenWidth then
+        leftScore = leftScore + 1
+        resetBall(1)
+    end
 end
 
 function love.draw()
@@ -70,4 +91,6 @@ function love.draw()
     love.graphics.rectangle("fill", rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height)
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", ball.x, ball.y, ball.width, ball.height)
+    love.graphics.setFont(scoreFont)
+    love.graphics.printf(leftScore .. "  -  " .. rightScore, 0, 20, screenWidth, "center")
 end
