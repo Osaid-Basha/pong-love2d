@@ -1,8 +1,8 @@
 # Pong Game
 
-Student Name: [Your full name]
+Student Name: OSAID NIDAL BASHA
 
-Class/Section: [Your class/section]
+ID NUMBER: 12240884
 
 Project Name: Pong Game
 
